@@ -251,8 +251,10 @@ def main():
     Triger=False
     money = loadMoney()
     startMoney = money
-    if (money<10):
-        money+=200
+    saveMoney(money)
+    
+    if (money<1):
+        money=1
         Triger=True
 
 
@@ -260,11 +262,12 @@ def main():
         colorLine(10, "Рад тебя видеть в моем КАЗИНО 678, дорогой!")
         color(14)
         if(Triger):
-            print(f"  Держи 200 {valuta} дружище(нет)! ")
-        print(f"У тебя на счету: {money} {valuta}")
+            print(f"  Держи 1 {valuta} дружище(нет)! ")
+        print(f" У тебя на счету: {money} {valuta}")
        
 
         color(14)
+        print(" У нас все законно. Все работает. Лицензия №2281488282")
         print(" Ты можешь сыграть в:")
         print("     1. Рулетка")
         print("     2. Кости")
@@ -286,12 +289,12 @@ def main():
         colorLine(12, "       Ну давай...       ")
   
     if (money <= 0):
-       colorLine(13,"      Пшол вон, нищеброд!     ")
+       colorLine(13,"     Пшол вон, нищеброд! Хочешь еще? Жду денги на  +375-228-200-300  ")
     color(11)
 
     saveMoney(money)
     color(7)
-    time.sleep(2)
+    input(" Нажми Enter чтобы уйти.")
     quit(0)
 
 
