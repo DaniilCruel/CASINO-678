@@ -71,19 +71,45 @@ def getInput(digit, message):
 
 
 def getRoulet(visible):
-    tickTime = random.randint(100,200) / 100000
+   
+    tickTime = random.randint(100,200) / 1500
+    i =  random.randint(12,18)
     mainTime = 0
     number = random.randint(0,38)
-    increaseTickTime = random.randint(100,110) / 5000
+    increaseTickTime = random.randint(100,110) /95
     col=1
 
-    while (mainTime < 1.2):
+
+    while (i>1):
+        col +=1
+        if (col >15):
+            col = 1
+
+        color(col)
+        number +=1
+        if (number >38):
+            number=0
+        
+        printNumber = number
+        if (number == 37):
+            printNumber = "00"
+        elif( number == 38):
+            printNumber = "000"
+        print("Число >", printNumber, "*"*number, "*"*(79-number*2),   "*"*number)
+        i -=1
+        if (visible):
+            time.sleep(tickTime)
+
+
+
+
+    while (mainTime < 1.7):
         col +=1
         if (col >15):
             col = 1
 
         mainTime +=tickTime
-        tickTime += increaseTickTime
+        tickTime *= increaseTickTime
 
         color(col)
         number +=1
