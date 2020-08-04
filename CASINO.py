@@ -43,7 +43,7 @@ def color(c):
     windll.Kernel32.SetConsoleTextAttribute(h,c)
 
 def colorLine(c,s):
-    for i in range(30):
+    for i in range(3):
         print()
     color(c)
     print("*" * (len(s)+2))
@@ -68,12 +68,12 @@ def getInput(digit, message):
         ret = input(message)
     return ret
 
-
+#----------------------Рулетка----------------------------------
 
 def getRoulet(visible):
    
-    tickTime = random.randint(100,200) / 1500
-    i =  random.randint(12,18)
+    tickTime = random.randint(100,200) / 2200
+    i =  random.randint(32,48)
     mainTime = 0
     number = random.randint(0,38)
     increaseTickTime = random.randint(100,110) /95
@@ -243,26 +243,116 @@ def roulet():
             input(" Нажим Enter для продолжения...")
 
   
+#----------------------Кости----------------------------------
 
+def getDice():
+    count = random.randint(10,14)
+    sleep = 0
+    while (count > 0):
+        color(count+7)
+        if (col >15):
+            col = 7
+        x = random.randint(1,6)
+        y = random.randint(1,6)
+        print ( " "*10, "----- ------")
+        print ( " "*10, f"| {x} | | {y} |")
+        print ( " "*10, "----- ------")
+        time.sleep(sleep)
+        sleep +=1/count
+        count -=1
+    return x+y
 
+def dice():
+    global money
+    playGame = True
+    print()
+    colorLine(3, "Добро пожаловать")
+    while (playGame and money >4):
+
+       
+        color(14)
+        print(f"\n У тебя на счету: {money} {valuta}\n")
+
+        color(7)
+        stavka = getIntImput(10, money, f"Сделай ставку от 5 {valuta}:")
+        if (stavka == 0):
+            return(0)
+        playRound = True
+        control = stavka
+        oldRes= getDice()
+        firstPlay = True
+
+        while(playRound and stavka >4 and money >0):
+
+            if (stavka > money):
+                stavka= money
+
+            color(11)
+            print(f"\n В твоем распоряжении: {stavka} {valuta}")
+            color(12)
+            print(f"\n Текущая сумма чисел на костях: {oldRes}")
+            color(11)
+            print(f"\n Сумма чисел на гранях будет больше, меньше или равна предыдущей?")
+            color(7)
+
+            x = getInput("0123", "Введи 1= больше, 2 - меньше, 3- равно  или 0 - выход:")
+
+            if (x!="0"):
+                firstPlay= False
+                if (stavka > money):
+                    stavka=money
+                
+                money -= stavka
+                diceRes = getDice()
+
+                win = (oldRes > diceRes and x == "2") or (oldRes <diceRes and x == "1")
+
+                if (not x == "3"):
+                    if(win):
+                        money += stavka + stavka //5
+                        pobeda(stavka //5)
+                        stavka += stavka//5
+                    else:
+                        stavka = control
+                        proigr(stavka)
+                elif (x=="3"):
+                    if (oldRes == diceRes):
+                        money += stavka *3
+                        pobeda(stavka *5)
+                        stavka *= stavka
+                    else:
+                        stavka = control
+                        proigr(stavka)
+                
+                oldRes = diceRes
+                
+            else:
+                if(firstPlay):
+                    money -=stavka
+                playRound = False
+            saveMoney(money)
+    else:
+        print(f"БАГ!, денег лолжно быть больше 5 {valuta}")
+        return(0)
 
 def main():
     global money, playGame
     Triger=False
     money = loadMoney()
     startMoney = money
-    saveMoney(money)
+    
     
     if (money<1):
-        money=1
+        money=1000
         Triger=True
+        saveMoney(money)
 
 
     while (playGame and money >0):
         colorLine(10, "Рад тебя видеть в моем КАЗИНО 678, дорогой!")
         color(14)
         if(Triger):
-            print(f"  Держи 1 {valuta} дружище(нет)! ")
+            print(f"  Держи 1 {valuta} дружище! ")
         print(f" У тебя на счету: {money} {valuta}")
        
 
@@ -279,11 +369,11 @@ def main():
         if (x== "0"):
             playGame = False
         elif (x == "1"):
-              roulet()
+            roulet()
         elif (x == "2"):
-              pass # dice()
+            dice()
         elif (x == "3"):
-              pass # oneHandBand()
+            pass # oneHandBand()
 
     if (money > 0):  
         colorLine(12, "       Ну давай...       ")
@@ -294,7 +384,7 @@ def main():
 
     saveMoney(money)
     color(7)
-    input(" Нажми Enter чтобы уйти.")
+    input(" Нажми Enter чтобы уйти(")
     quit(0)
 
 
